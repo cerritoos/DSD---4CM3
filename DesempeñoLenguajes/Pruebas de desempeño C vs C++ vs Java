@@ -1,0 +1,6 @@
+Pruebas de desempeño C vs C++ vs Java
+
+char *cadenota = NULL;
+int posicion;
+cadenota = (char*) realloc(cadenota, posicion);
+memcpy(cadenota, cadena, 4);
