@@ -1,9 +1,5 @@
 
 package fourierdibuja;
-import java.io.*;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 
 /**
  *
@@ -33,7 +29,7 @@ public class FourierDibuja {
                         
 			c.setCoord(x, y+YSIZE/2);
                         System.out.println("X: " + c.x + " Y: " + c.y);
-                        c.enviarMensaje("192.168.43.172", 7000);
+                        c.enviarMensaje("192.168.15.44", 7000);
                         enviados++;
 		}
 	}

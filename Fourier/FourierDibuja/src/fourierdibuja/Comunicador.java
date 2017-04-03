@@ -5,9 +5,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.nio.ByteBuffer;
 
 /**
  *
@@ -25,20 +27,24 @@ public class Comunicador {
             {
                 s = new DatagramSocket();
                 
-                Integer xo = x;
-                byte [] buf = (xo.toString()).getBytes();
-                DatagramPacket p = new DatagramPacket(buf, buf.length, InetAddress.getByName(ip), puerto);
-                s.send(p);
-                Integer yo = y;
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 
-                buf = (yo.toString()).getBytes();
-                p = new DatagramPacket(buf, buf.length, InetAddress.getByName(ip), puerto);
+                Integer xo = x;
+                String xs = xo.toString();
+                
+                Integer yo = y;
+                String ys = yo.toString();
+                
+                String msj = xs + "?" + ys;
+                byte [] buf = msj.getBytes();
+                System.out.println(buf.length);
+                    
+                DatagramPacket p = new DatagramPacket(buf, buf.length, InetAddress.getByName(ip), puerto);
                 s.send(p);
                 
                 //System.out.println("Se ha enviado");
                 s.close();
                 
-                Thread.sleep(5);
             }
             catch(Exception e)
             {e.printStackTrace();}
