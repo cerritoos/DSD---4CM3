@@ -1,6 +1,8 @@
 
 package fourierdibuja;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Angeles Cerritos
@@ -10,8 +12,13 @@ public class FourierDibuja {
     public static final int XSIZE = 800;
     
     public static void main(String[] args) {
-        Comunicador c = new Comunicador();
         
+        int op = JOptionPane.showConfirmDialog(null, "Dibujar -> Si \nBorrar -> No", "Elija una opcion", JOptionPane.YES_NO_OPTION);
+        
+        
+        Comunicador c = new Comunicador();
+        c.opt = (char)(op + '0');
+        System.out.println("Opcion: " + c.opt);
         int enviados = 0;
         for (int j= 1; j < 6; j+=2)
 	{
@@ -29,7 +36,7 @@ public class FourierDibuja {
                         
 			c.setCoord(x, y+YSIZE/2);
                         System.out.println("X: " + c.x + " Y: " + c.y);
-                        c.enviarMensaje("192.168.15.44", 7000);
+                        c.enviarMensaje("10.100.70.185", 7000);
                         enviados++;
 		}
 	}

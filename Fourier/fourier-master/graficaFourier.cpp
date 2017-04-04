@@ -38,31 +38,37 @@ int main(int args, char *argv[]){
 
 	while(1){
 		PaqueteDatagrama resp(10);
-//		char * cad = resp.obtieneDatos();
 		
-		//recibe x para graficar
+		// Recibe los datos para graficar
 		sock.recibe(resp);
-		string cad = resp.obtieneDatos();
-		//guarda coordenada x
-		cout << "Longitud cad " << resp.obtieneDatos() << endl;
-/*		for(int i = 0; i < 8; i++)
-			cout << cad[i] + 'A' << endl;
-		sleep(3);*/
+		//cout << "Cadena " << resp.obtieneDatos() << endl;
 
-		cooX = atoi((cad.substr(0,4)).c_str());
-		cout << "coordX: " << cooX << endl;
-		//recibe y para graficar
-		//sock.recibe(resp);
+		string cad = resp.obtieneDatos();
+
+		/* El primer caracter indica si se debe dibujar o si se debe borrar */
+		//cout << "Elemento " << cad[0] << endl;
+		/* 0->dibujar, 1-> borrar */
+		bool dibuja = (cad[0] == '1');
+		//cout << "Booleano " << dibuja << endl;
+
 		int ind = cad.find('?');
 		int ind2 = cad.length();
-		cout << "Ind " << ind << endl;
-		cout << "Ind2 " << ind2 << endl;
-		cout << "substr " << cad.substr(ind ,ind2-ind) << endl;
+
+		//cout << "Ind " << ind << endl;
+		//cout << "Ind2 " << ind2 << endl;
+
+
+		//guarda coordenada x
+		cooX = atoi((cad.substr(1,ind)).c_str());
+		//cout << "coordX: " << cooX << endl;
+		
+		//cout << "substr " << cad.substr(ind ,ind2-ind) << endl;
+		
 		cooY = atoi( cad.substr(ind + 1 ,ind2-ind).c_str() );
-		cout << "coordY: " << cooY << endl;
+		//cout << "coordY: " << cooY << endl;
 		//grafica el punto
 		//blue
-		gfx_color(0,0,200);
+		(!dibuja ? gfx_color(0,0,200) : gfx_color(0,0,0) );
 		gfx_point(cooX, cooY);
 		gfx_flush();			
 	}

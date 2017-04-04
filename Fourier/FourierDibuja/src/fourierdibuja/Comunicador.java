@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
 public class Comunicador {
     DatagramSocket s;
     int x, y;
+    char opt;
     
 
 
@@ -35,9 +36,9 @@ public class Comunicador {
                 Integer yo = y;
                 String ys = yo.toString();
                 
-                String msj = xs + "?" + ys;
+                String msj = opt + xs + "?" + ys;
                 byte [] buf = msj.getBytes();
-                System.out.println(buf.length);
+                //System.out.println(buf.length);
                     
                 DatagramPacket p = new DatagramPacket(buf, buf.length, InetAddress.getByName(ip), puerto);
                 s.send(p);
