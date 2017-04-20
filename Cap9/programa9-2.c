@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 int puerto = 7200;
-char * ip_server = "192.168.43.16";
+char * ip_server = "192.168.0.110";
 
 int main(void)
 {
