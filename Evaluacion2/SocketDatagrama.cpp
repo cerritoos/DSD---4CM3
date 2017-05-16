@@ -19,7 +19,7 @@ int SocketDatagrama::recibe(PaqueteDatagrama &p){
 	int r = recvfrom(s, p.obtieneDatos(), p.obtieneLongitud(), 0, (struct sockaddr *)&direccionForanea, &clilen);
 	p.inicializaPuerto(ntohs(direccionForanea.sin_port));
 	inet_ntop(AF_INET, &(direccionForanea.sin_addr), p.obtieneDireccion(), INET_ADDRSTRLEN);
-	std :: cout << "\n"<< p.obtieneDireccion() << " - "<< p.obtienePuerto() << " dice: " << p.obtieneDatos() << std :: endl;
+	// :: cout << "\n"<< p.obtieneDireccion() << " - "<< p.obtienePuerto() << " dice: " << p.obtieneDatos() << std :: endl;
 	return r; 
 }
 
