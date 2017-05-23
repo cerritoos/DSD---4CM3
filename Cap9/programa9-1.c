@@ -12,7 +12,7 @@ int main(void)
    int num[2];
    int s, res, clilen;
    struct sockaddr_in server_addr, msg_to_client_addr;
-   printf("%x\n",msg_to_client_addr);
+   //printf("%x\n",msg_to_client_addr);
    s = socket(AF_INET, SOCK_DGRAM, 0);
    
    /* se asigna una direccion al socket del servidor*/
@@ -24,6 +24,7 @@ int main(void)
    clilen = sizeof(msg_to_client_addr);
    while(1) {
       recvfrom(s, (char *) num, 2*sizeof(int), 0, (struct sockaddr *)&msg_to_client_addr, &clilen);
+      printf("Solicitud recibida\n");
       res = num[0] + num[1];
       
       /* envía la petición al cliente. La estructura msg_to_client_addr contiene la dirección socket del cliente */
