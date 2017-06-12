@@ -3,7 +3,7 @@
 PROYECTO=multicast
 DESTDIR=/usr/local/bin
 CFLAGS= 
-LDFLAGS=-lm -lX11 -pthread
+LDFLAGS=-lm -pthread
 CC=g++
 
 

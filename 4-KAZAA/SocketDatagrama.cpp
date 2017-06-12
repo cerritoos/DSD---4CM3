@@ -1,11 +1,7 @@
-#include "SocketMulticast.h"
-#include <iostream>
+#include "SocketDatagrama.h"
 
-using namespace std;
-
-
-SocketMulticast :: SocketMulticast(int puerto){
-	s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+SocketDatagrama :: SocketDatagrama(int puerto){
+	s = socket(AF_INET, SOCK_DGRAM, 0);
 	bzero((char *)&direccionLocal, sizeof(direccionLocal));
    	direccionLocal.sin_family = AF_INET;
    	direccionLocal.sin_addr.s_addr = INADDR_ANY;
@@ -13,37 +9,21 @@ SocketMulticast :: SocketMulticast(int puerto){
    	bind(s, (struct sockaddr *)&direccionLocal, sizeof(direccionLocal));
 }
 
-SocketMulticast :: ~SocketMulticast(){
+SocketDatagrama :: ~SocketDatagrama(){
 	bzero((char *)&direccionLocal, sizeof(direccionLocal));
 	close(s);
 }
 
-int SocketMulticast::setMulticast(unsigned char ttl)
-{
-	TTL = ttl;
-	return setsockopt(s, IPPROTO_IP, IP_MULTICAST_TTL, (void *) &TTL, sizeof(TTL));
-}
-
-int SocketMulticast::joinMulticast(const char * ip_multicast)
-{
-	struct ip_mreq multicast;
-
-	multicast.imr_multiaddr.s_addr = inet_addr(ip_multicast);
-	multicast.imr_interface.s_addr = INADDR_ANY;
-
-	return setsockopt(s, IPPROTO_IP, IP_ADD_MEMBERSHIP, (void *)&multicast, sizeof(multicast));
-}
-
-int SocketMulticast::recibe(PaqueteDatagrama &p){
+int SocketDatagrama::recibe(PaqueteDatagrama &p){
 	socklen_t clilen =  sizeof(direccionForanea);
 	int r = recvfrom(s, p.obtieneDatos(), p.obtieneLongitud(), 0, (struct sockaddr *)&direccionForanea, &clilen);
 	p.inicializaPuerto(ntohs(direccionForanea.sin_port));
 	inet_ntop(AF_INET, &(direccionForanea.sin_addr), p.obtieneDireccion(), INET_ADDRSTRLEN);
-	//:: cout << "\n"<< p.obtieneDireccion() << " - "<< p.obtienePuerto() << " dice: " << p.obtieneDatos() << std :: endl;
+	// :: cout << "\n"<< p.obtieneDireccion() << " - "<< p.obtienePuerto() << " dice: " << p.obtieneDatos() << std :: endl;
 	return r; 
 }
 
-int SocketMulticast::envia(PaqueteDatagrama &p){
+int SocketDatagrama::envia(PaqueteDatagrama &p){
 	socklen_t clilen =  sizeof(direccionForanea);
 	bzero((char *)&direccionForanea, sizeof(direccionForanea));
    	direccionForanea.sin_family = AF_INET;
@@ -55,7 +35,7 @@ int SocketMulticast::envia(PaqueteDatagrama &p){
 	return r;
 }
 
-void SocketMulticast::setTimeout(time_t segundos, suseconds_t microseconds)
+void SocketDatagrama::setTimeout(time_t segundos, suseconds_t microseconds)
 {
 	s_timeout.tv_sec = segundos;
 	s_timeout.tv_usec = microseconds;
@@ -66,7 +46,7 @@ void SocketMulticast::setTimeout(time_t segundos, suseconds_t microseconds)
 
 }
 
-void SocketMulticast::unsetTimeout()
+void SocketDatagrama::unsetTimeout()
 {
 	timeout = false;
 	s_timeout.tv_sec = 0;
@@ -76,7 +56,7 @@ void SocketMulticast::unsetTimeout()
 }
 
 
-int SocketMulticast::recibeTimeout(PaqueteDatagrama &p)
+int SocketDatagrama::recibeTimeout(PaqueteDatagrama &p)
 {
 	socklen_t clilen =  sizeof(direccionForanea);
 	struct timeval t1, t2, res;
@@ -86,7 +66,7 @@ int SocketMulticast::recibeTimeout(PaqueteDatagrama &p)
 
 	
 
-	timersub(&t2, &t1, &res);
+	/*timersub(&t2, &t1, &res);
 
 	if( r < 0 )
 	{
@@ -100,7 +80,7 @@ int SocketMulticast::recibeTimeout(PaqueteDatagrama &p)
 		p.inicializaPuerto(ntohs(direccionForanea.sin_port));
 		inet_ntop(AF_INET, &(direccionForanea.sin_addr), p.obtieneDireccion(), INET_ADDRSTRLEN);
 		printf("Tiempo transcurrido: %ld seg %ld microsegundos\n", res.tv_sec, res.tv_usec);
-	}
+	}*/
 
 	return r; 
-}
+}	

@@ -6,7 +6,7 @@
 
 class PaqueteDatagrama{
 public:
-	PaqueteDatagrama(char *, unsigned int, char *, int);
+	PaqueteDatagrama(char *, unsigned int, const char *, int);
 	PaqueteDatagrama(unsigned int);
 	~PaqueteDatagrama();
 	char *obtieneDireccion();          

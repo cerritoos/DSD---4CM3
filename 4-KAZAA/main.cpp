@@ -1,53 +1,64 @@
 #include "SocketMulticast.h"
+#include "SocketDatagrama.h"
+#include "mensajes.h"
+#include "hilos.h"
 #include <iostream>
-#include<thread>
+#include <thread>
+#include <fcntl.h>
+#include <dirent.h>
+#include <stdio.h>
+#include <set>
+#include <map>
+#include <string>
+//#include <pair>
 
 using namespace std;
 
-#define MULT_ADDR "225.12.12.12"
-#define EVER 1
 
-int puerto = 7200;
-void escucha();
-void anuncia();
+string MULT_ADDR = "225.12.12.12";
+int PTO_MULTICAST= 7200;
+int PTO_UNICAST = 7300;
+int EVER = 1;
 
-SocketMulticast s(7200);
+SocketMulticast sMulti(PTO_MULTICAST);
+SocketDatagrama sUni(PTO_UNICAST);
 
-int main()
+set<string> IP_activas;
+set<string>::iterator i_ips;
+string IP_local;
+bool solicitando_retrans = false;
+string dir;
+string dir1;
+
+
+
+
+int main(int argc, char * argv[])
 {
 	
-	s.setMulticast(3);
-	s.joinMulticast(MULT_ADDR);
+	IP_local = argv[1];
+	dir = argv[2];
+	dir1 = argv[3];
+
+	cout << "La ruta es : " << dir << endl;
+	cout << "La ruta es : " << dir1 << endl;
+
+	sMulti.setMulticast(3);
+	sMulti.joinMulticast(MULT_ADDR.c_str());
 
 	thread hilo_anuncia = thread(anuncia);
-	thread hilo_escucha = thread(escucha);
-	hilo_escucha.join();
-	hilo_anuncia.join();
-
+	thread hilo_escuchaMulti = thread(escuchaMulticast);
+	thread hilo_escuchaUni = thread(escuchaUnicast);
+	thread hilo_busca = thread(busca);
 	
+	hilo_escuchaMulti.join();
+	hilo_anuncia.join();
+	hilo_busca.join();
+	hilo_escuchaUni.join();
+
 
 	return 0;
 
 
 }
 
-void anuncia(){
-	char * mensaje = "HOla mundo\n";
-	PaqueteDatagrama p(mensaje, sizeof(mensaje), MULT_ADDR, puerto);
-
-	s.envia(p);
-	cout << "Mensaje enviado" << endl;
-	return;
-}
-
-
-void escucha()
-{
-	for(;EVER;)
-	{
-		PaqueteDatagrama p(100);
-		s.recibe(p);
-		cout << "Se ha recibido algo: " << p.obtieneDatos() << endl;
-
-	}
-}

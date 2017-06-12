@@ -25,7 +25,7 @@ public:
 	int envia(PaqueteDatagrama &p);
 	int recibe(PaqueteDatagrama &p);
 	int setMulticast(unsigned char ttl);
-	int joinMulticast(char * ip_multicast);
+	int joinMulticast(const char * ip_multicast);
 	void setTimeout(time_t segundos, suseconds_t microseconds);
 	void unsetTimeout();
 	int recibeTimeout(PaqueteDatagrama &p);

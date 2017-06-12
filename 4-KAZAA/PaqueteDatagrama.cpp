@@ -1,6 +1,6 @@
 #include "PaqueteDatagrama.h"
 
-PaqueteDatagrama::PaqueteDatagrama(char *msj, unsigned int lon, char *IP, int p) {
+PaqueteDatagrama::PaqueteDatagrama(char *msj, unsigned int lon, const char *IP, int p) {
 	longitud = lon;
 	puerto = p;
 	datos = new char[lon];
